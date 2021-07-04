@@ -5,15 +5,16 @@ import random
 from rps_game.player import Player
 from rps_game.game import Game
 from rps_game.round import Round
+from rps_game.helper.tables import show_pretty_scoreboard
 
 
 class PlayGame:
     def __init__(self, player_1, player_2, game_type, rounds=1):
-        game = Game(player_1, player_2)
+        game = Game(player_1, player_2, rounds)
         round_number = 0
-        for round in range(rounds):
+        for current_round in range(rounds):
             round_number += 1
-            print(f"Round {round_number}")
+            print(f"Round {round_number}/{rounds}")
             if game_type == 1:  # game type 1 is "human vs cpu"
                 Round.show_options()
                 player_1_choice = PlayGame.human_choice()
@@ -24,21 +25,64 @@ class PlayGame:
             player_2_choice = PlayGame.virtual_choice()
             current_round = Round(player_1_choice, player_2_choice)
             PlayGame.show_round_choices(current_round)
-            current_round.winner = game.round(player_1_choice, player_2_choice)
+            current_round.winner = game.play_round(player_1_choice, player_2_choice)
             PlayGame.show_round_winner(current_round)
             game.save_round(current_round)
             print()
             if round_number != rounds:
+                # check here if both can still win or draw
+                if not PlayGame.can_still_win(game):
+                    input("there is already a winner! Press ENTER to see")
+                    break
+                # check finish
                 input("Press Enter for next round\n")
             elif round_number == rounds:
-                input("Press Enter to Show the Result\n")
-        scores = game.show_scoreboard()
+                input("Press Enter to show final scores\n")
+        #game.show_scoreboard()
+        show_pretty_scoreboard(game)
         winner = game.declare_winner()
         print()
         if winner:
-            print(f"{winner.name}, you Won !")
+            # customized message: it changes depending of type of game
+            PlayGame.final_message(game, winner)
         else:
             print("It's a draw !")
+            print()
+        print()
+        print("Do you want to play again? (Y/N)")
+        play_again = input("Enter: ")
+        print()
+        if play_again in ["Y", "y", "Yes", "yes"]:
+            new_game_rounds = PlayGame.choose_max_rounds()
+            PlayGame(player_1, player_2, game_type, new_game_rounds)
+        else:
+            print("See you soon!")
+
+    @staticmethod
+    def can_still_win(game):
+        tot_rounds = game.amt_rounds
+        played_rounds = len(game.played_rounds)
+        scoreboard = game.scoreboard
+        lowest_points = scoreboard[min(scoreboard, key=scoreboard.get)]
+        highest_points = scoreboard[max(scoreboard, key=scoreboard.get)]
+        remaining_rounds = tot_rounds - played_rounds
+        if (lowest_points + remaining_rounds) >= highest_points:
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def play_human_vs_cpu():
+        human_name = input("choose a name: ")
+        human_player = Player(human_name)
+        virtual_player = Player()
+        return human_player, virtual_player
+
+    @staticmethod
+    def play_cpu_vs_cpu():
+        cpu_1 = Player()
+        cpu_2 = Player()
+        return cpu_1, cpu_2
 
     @staticmethod
     def human_choice():
@@ -76,7 +120,7 @@ class PlayGame:
 
     @staticmethod
     def choose_max_rounds():
-        max_rounds = input("How many rounds per game? ")
+        max_rounds = input("How many rounds? ")
         while True:
             try:
                 max_rounds = int(max_rounds)
@@ -97,6 +141,15 @@ class PlayGame:
             print(f"winner of the round: {round.winner.name}")
         else:
             print("Draw")
+
+    @staticmethod
+    def final_message(game, winner):
+        if game.player_1.player_type == "virtual" and game.player_1.player_type == "virtual":
+            print(f"{winner.name}, you WON !")
+        elif winner.player_type == 'human':
+            print(f"{winner.name}, you WON !")
+        else:
+            print(f"you LOST against {winner.name}")
 
 
 if __name__ == '__main__':
