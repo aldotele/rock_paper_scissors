@@ -8,11 +8,11 @@ class TestGame(unittest.TestCase):
     def setUp(self):
         self.game_human_vs_cpu = Game(Player("John"), Player())
         self.game_cpu_vs_cpu = Game(Player(), Player(), 5)
-        # customizing the scoreboard of a new game to declare a winner
+        # customizing scoreboard of a new game to declare a winner
         self.new_game_human_vs_cpu = Game(Player("Bill"), Player())
         self.new_game_human_vs_cpu.player_2.name = "CrazyLeopard"
         self.new_game_human_vs_cpu.scoreboard = {"Bill": 1, "CrazyLeopard": 0}
-        # customizing the scoreboard of another game to declare a draw
+        # customizing scoreboard of another game to declare a draw
         self.another_game_human_vs_cpu = Game(Player("Frida"), Player())
         self.another_game_human_vs_cpu.player_2.name = "BigWhale"
         self.another_game_human_vs_cpu.scoreboard = {"Frida": 0, "BigWhale": 0}
