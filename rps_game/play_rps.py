@@ -86,7 +86,7 @@ class PlayGame:
                 human_player = Player(human_name)
                 break
             except ValueError:
-                human_name = input("not valid. nickname should include at least 3 characters with 1 letter"
+                human_name = input("not valid. Nickname should be between 3 and 15 characters with at least one letter"
                                    "\nTry again: ")
         virtual_player = Player()
         return human_player, virtual_player
