@@ -82,12 +82,17 @@ class PlayGame:
     def play_human_vs_cpu():
         human_name = input("choose a nickname: ")
         while True:
-            try:
-                human_player = Player(human_name)
-                break
-            except ValueError:
-                human_name = input("not valid. Nickname should be between 3 and 15 characters with at least one letter"
-                                   "\nTry again: ")
+            if human_name:
+                try:
+                    human_player = Player(human_name)
+                    break
+                except ValueError:
+                    human_name = input("Not valid. Nickname should be between 3 and 15 characters"
+                                       " with at least one letter"
+                                       "\nchoose a valid nickname: ")
+            else:
+                human_name = input("name cannot be empty.\nchoose a valid nickname: ")
+
         virtual_player = Player()
         return human_player, virtual_player
 
@@ -99,8 +104,8 @@ class PlayGame:
 
     @staticmethod
     def human_choice():
-        choice_code = input("choose one: ")
-        retry_message = "Not valid. Please enter a number between 1 and 3: "
+        choice_code = input("choose a number: ")
+        retry_message = "Not valid.\nPlease enter a number between 1 and 3: "
         while True:
             try:
                 choice_code = int(choice_code)
@@ -120,16 +125,16 @@ class PlayGame:
     def choose_game_type():
         for game_type in Game.types:  # game type can be either 1 (human vs cpu) or 2 (cpu vs cpu)
             print(f"{game_type} - {Game.types[game_type]}")
-        game_code = input("choose one: ")
+        game_code = input("choose a number: ")
         while True:
             try:
                 game_code = int(game_code)
                 if game_code in [1, 2]:
                     return game_code
                 else:
-                    game_code = input("not valid. Please enter 1 or 2: ")
+                    game_code = input("Not valid.\nPlease enter 1 or 2: ")
             except ValueError:
-                game_code = input("not valid. Please enter 1 or 2: ")
+                game_code = input("Not valid.\nPlease enter 1 or 2: ")
 
     @staticmethod
     def choose_max_rounds():
@@ -140,9 +145,9 @@ class PlayGame:
                 if 1 <= max_rounds <= 10:
                     return max_rounds
                 else:
-                    max_rounds = input("not valid. Please enter a number between 1 and 10: ")
+                    max_rounds = input("Not valid.\nPlease enter a number between 1 and 10: ")
             except ValueError:
-                max_rounds = input("not valid. Please enter a number between 1 and 10: ")
+                max_rounds = input("Not valid.\nPlease enter a number between 1 and 10: ")
 
     @staticmethod
     def show_round_choices(round):
