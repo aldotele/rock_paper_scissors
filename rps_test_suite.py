@@ -2,6 +2,7 @@ import unittest
 from tests.test_player import TestPlayer
 from tests.test_round import TestRound
 from tests.test_game import TestGame
+from tests.test_names import TestFunnyNameGenerator
 
 
 def suite():
@@ -14,6 +15,8 @@ def suite():
     suite.addTest(TestGame('test_play_round'))
     suite.addTest(TestGame('test_save_round'))
     suite.addTest(TestGame('test_declare_winner'))
+    suite.addTest(TestGame('test_declare_winner'))
+    suite.addTest(TestFunnyNameGenerator('test_compose_name'))
     return suite
 
 
