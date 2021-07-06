@@ -17,6 +17,9 @@ class TestPlayer(unittest.TestCase):
 
     def test_is_name_valid(self):
         self.assertTrue(Player.is_name_valid("John"))
+        self.assertTrue(Player.is_name_valid("Constantine Jr."))  # exactly 15 characters
+        self.assertFalse(Player.is_name_valid("Constantine Junior"))  # exactly 15 characters
+        self.assertFalse(Player.is_name_valid(""))
         self.assertFalse(Player.is_name_valid("J."))
         self.assertFalse(Player.is_name_valid("007"))
 
